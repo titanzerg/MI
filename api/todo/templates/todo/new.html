@@ -1,0 +1,57 @@
+
+<h1> What is to be done </h1>
+<input type="text" value="" id="memo" />
+
+<h1> Due date </h1>
+
+<input type="text" id="duedate">
+
+<input type="checkbox"  id="taskfinish"> Finish
+</br>
+
+
+<input type="button" value="save" id="btnSave"/>
+<input type="button" value="back" id="btnBack"/>
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+
+    Date.prototype.convertdate = function() {
+   var yyyy = this.getFullYear();
+   var mm = this.getMonth() < 9 ? "0" + (this.getMonth() + 1) : (this.getMonth() + 1); // getMonth() is zero-based
+   var dd  = this.getDate() < 10 ? "0" + this.getDate() : this.getDate();
+   return "".concat(yyyy).concat("-").concat(mm).concat("-").concat(dd).concat("T00:00:00");
+  };
+
+    $(function() {
+
+      $( "#duedate" ).datepicker().datepicker( "option", "dateFormat", 'yy-mm-dd' );
+
+      $("#btnSave").click(function() {
+        dd = ""
+        if ($( "#duedate" ).datepicker("getDate") != null) {
+          dd = $( "#duedate" ).datepicker("getDate").convertdate();
+        }
+
+        if ($("#memo").val()==""){
+          alert("memo cannot be empty")
+        }
+        else {
+          $.post( "/todos/", { memo: $("#memo").val(),duedate:dd,taskfinish:$("#taskfinish").prop('checked')  })
+           .done(function( data ) {
+               window.location = "/web/";
+             });    
+        }
+
+
+      });
+      $("#btnBack").click(function() {
+            window.location = "/web/";
+      });
+    });
+
+    </script>

@@ -1,0 +1,39 @@
+<h1>To do list</h1>
+{% if todo_list %}
+    <ul>
+    {% for todo in todo_list %}
+        <li><input type="checkbox" id="chk{{ todo.id }}" v="{{ todo.id }}"/><a href="{% url 'webdetail' todo.id %}">{{ todo.memo }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No Todo are available.</p>
+{% endif %}
+
+
+<input type="button" value="create" id="btnCreate" />
+<input type="button" value="delete" id="btnDelete" />
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+<script>
+$(function() {
+  $("#btnCreate").click(function() {
+    window.location = "/web/new/"
+  });
+  $("#btnDelete").click(function() {
+    for (i = 0;i < $("input:checkbox").length;i++){
+      chk = $("input:checkbox").eq(i);
+      if (chk.prop('checked')) {
+        $.ajax({
+          url: "/todos/"+chk.attr("v")+"/",
+          type: 'DELETE'
+        });
+      }
+    }
+    location.reload();
+  });
+});
+
+
+</script>
