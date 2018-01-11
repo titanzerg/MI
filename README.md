@@ -1,5 +1,5 @@
 # How To Runserver
-1. clone code มาจาก github
+1. clone code from github
 ```
 git clone https://github.com/titanzerg/MI.git
 ```
