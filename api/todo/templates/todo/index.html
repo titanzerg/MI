@@ -1,10 +1,26 @@
 <h1>To do list</h1>
 {% if todo_list %}
-    <ul>
+    <table>
+      <thead>
+        <tr>
+          <td>#</td><td>description</td><td>status</td>
+        </tr>
+      </thead>
+      <tbody>
+
     {% for todo in todo_list %}
-        <li><input type="checkbox" id="chk{{ todo.id }}" v="{{ todo.id }}"/><a href="{% url 'webdetail' todo.id %}">{{ todo.memo }}</a></li>
+        <tr>
+          <td><input type="checkbox" id="chk{{ todo.id }}" v="{{ todo.id }}"/></td>
+          <td><a href="{% url 'webdetail' todo.id %}">{{ todo.memo }}</a></td>
+          {% if todo.taskfinish %}
+          <td>Finish</td>
+          {% else %}
+          <td>Not yet</td>
+          {% endif %}
+        </tr>
     {% endfor %}
-    </ul>
+  </tbody>
+</table>
 {% else %}
     <p>No Todo are available.</p>
 {% endif %}
@@ -13,7 +29,11 @@
 <input type="button" value="create" id="btnCreate" />
 <input type="button" value="delete" id="btnDelete" />
 
-
+<style>
+table, th, td {
+    border: 1px solid black;
+}
+</style>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 
 <script>
