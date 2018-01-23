@@ -26,7 +26,7 @@ def todo_list(request):
 def todo_detail(request, pk):
     try:
         todo = Todo.objects.get(pk=pk)
-    except Snippet.DoesNotExist:
+    except Todo.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
@@ -66,7 +66,7 @@ def web_new(request):
 def web_detail(request, pk):
     try:
         todo = Todo.objects.get(pk=pk)
-    except Snippet.DoesNotExist:
+    except Todo.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':

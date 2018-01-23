@@ -1,0 +1,20 @@
+version: "2"
+services:
+  mi:
+      container_name: mi
+      build:
+        context: ./api
+        dockerfile: .Dockerfile
+      volumes:
+          - ./api:/MI
+      ports:
+          - 2080:8000
+      restart: always
+      working_dir: /MI
+      networks:
+          - MInetwork
+      command: python manage.py runserver 0.0.0.0:8000
+
+networks:
+  MInetwork:
+      driver: bridge
