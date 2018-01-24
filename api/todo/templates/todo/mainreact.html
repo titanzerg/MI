@@ -49,7 +49,15 @@ const TodoForm = ({addTodo}) => {
 
 const Todo = ({todo, remove}) => {
   // Each Todo
-  return (<div><a href="#" className="list-group-item" onClick={() => {remove(todo.id)}}>{todo.memo}</a><br/></div>);
+  var statusShow;
+  if (todo.taskfinish) {
+    statusShow = "Finish"
+  }
+  else {
+    statusShow = "Not yet"
+  }
+
+  return (<tr><td><a href="#" className="list-group-item" onClick={() => {remove(todo.id)}}>{todo.memo}</a></td><td>{statusShow}</td></tr>);
 }
 
 const TodoList = ({todos, remove}) => {
@@ -57,7 +65,7 @@ const TodoList = ({todos, remove}) => {
   const todoNode = todos.map((todo) => {
     return (<Todo todo={todo} key={todo.id} remove={remove}/>)
   });
-  return (<div className="list-group" >{todoNode}</div>);
+  return (<table><thead><tr><td>text</td><td>status</td></tr></thead><tbody>{todoNode}</tbody></table>);
 }
 
 // Contaner Component
