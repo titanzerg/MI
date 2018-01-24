@@ -1,0 +1,131 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>To-Do</title>
+</head>
+<body>
+
+ <div class="container">
+  <div id="container" class="col-md-8 col-md-offset-2">  </div>
+</div>
+
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+<script src="https://unpkg.com/axios@0.14.0/dist/axios.min.js"></script>
+
+<script type="text/babel">
+  console.clear();
+
+const Title = ({todoCount}) => {
+  return (
+    <div>
+       <div>
+          <h1>to-do ({todoCount})</h1>
+       </div>
+    </div>
+  );
+}
+
+const TodoForm = ({addTodo}) => {
+  // Input Tracker
+  let input;
+  // Return JSX
+  return (
+    <form onSubmit={(e) => {
+        e.preventDefault();
+        addTodo(input.value);
+        input.value = '';
+      }}>
+      <input className="form-control col-md-12" ref={node => {
+        input = node;
+      }} />
+      <br />
+    </form>
+  );
+};
+
+const Todo = ({todo, remove}) => {
+  // Each Todo
+  return (<div><a href="#" className="list-group-item" onClick={() => {remove(todo.id)}}>{todo.memo}</a><br/></div>);
+}
+
+const TodoList = ({todos, remove}) => {
+  // Map through the todos
+  const todoNode = todos.map((todo) => {
+    return (<Todo todo={todo} key={todo.id} remove={remove}/>)
+  });
+  return (<div className="list-group" >{todoNode}</div>);
+}
+
+// Contaner Component
+// Todo Id
+window.id = 0;
+class TodoApp extends React.Component{
+  constructor(props){
+    // Pass props to parent class
+    super(props);
+    // Set initial state
+    this.state = {
+      data: []
+    }
+    this.apiUrl = '//57b1924b46b57d1100a3c3f8.mockapi.io/api/todos'
+  }
+  // Lifecycle method
+  componentDidMount(){
+    // Make HTTP reques with Axios
+    axios.get("/todos/")
+      .then((res) => {
+        // Set state with result
+        this.setState({data:res.data});
+        console.log(res.data)
+      });
+  }
+  // Add todo handler
+  addTodo(val){
+    // Assemble data
+    const todo = {memo: val}
+    console.log(todo)
+    // Update data
+    axios.post("/todos/", todo)
+       .then((res) => {
+
+          this.state.data.push(res.data);
+          this.setState({data: this.state.data});
+       });
+  }
+  // Handle remove
+  handleRemove(id){
+    // Filter all todos except the one to be removed
+    const remainder = this.state.data.filter((todo) => {
+      if(todo.id !== id) return todo;
+    });
+    // Update state with filter
+    axios.delete("/todos/"+id+"/")
+      .then((res) => {
+        this.setState({data: remainder});
+      })
+  }
+
+  render(){
+    // Render JSX
+    return (
+      <div>
+        <Title todoCount={this.state.data.length}/>
+        <TodoForm addTodo={this.addTodo.bind(this)}/>
+        <TodoList
+          todos={this.state.data}
+          remove={this.handleRemove.bind(this)}
+        />
+      </div>
+    );
+  }
+}
+ReactDOM.render(<TodoApp />, document.getElementById('container'));
+  </script>
+
+
+</body>
+</html>

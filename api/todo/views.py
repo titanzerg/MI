@@ -47,10 +47,8 @@ def todo_detail(request, pk):
 @api_view(['GET'])
 def web_list(request):
     if request.method == 'GET':
-        todo_list = Todo.objects.all()
-        template = loader.get_template('todo/index.html')
+        template = loader.get_template('todo/mainreact.html')
         context = {
-            'todo_list': todo_list,
         }
         return HttpResponse(template.render(context, request))
 
